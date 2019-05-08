@@ -1,0 +1,18 @@
+default_events:
+  - pull_request
+
+default_permissions:
+  # Repository contents, commits, branches, downloads, releases, and merges.
+  # https://developer.github.com/v3/apps/permissions/#permission-on-contents
+  contents: read
+  # Search repositories, list collaborators, and access repository metadata.
+  # https://developer.github.com/v3/apps/permissions/#metadata-permissions
+  metadata: read
+  # Pull requests and related comments, assignees, labels, milestones, and merges.
+  # https://developer.github.com/v3/apps/permissions/#permission-on-pull-requests
+  pull_requests: write
+
+name: Norwegian Spellchecker
+url: https://github.com/varianter/probot-norwegian-spellchecker
+description: A Norwegian spellchecker for PRs
+public: false
