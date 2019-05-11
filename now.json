@@ -3,7 +3,7 @@
   "env": {
     "APP_ID": "@app-id",
     "WEBHOOK_SECRET": "@webhook-secret",
-    "PRIVATE_KEY": "@private-key-base64-encoded"
+    "PRIVATE_KEY": "@private-key"
   },
   "builds": [
     { "src": "src/now.ts", "use": "@now/node" },
