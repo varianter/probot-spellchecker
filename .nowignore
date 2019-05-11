@@ -1,0 +1,12 @@
+# Ignore everything
+*
+
+# Except whats needed
+!src
+!src/*
+!node_modules
+!node_modules/*
+!dictionaries
+!dictionaries/
+!dictionaries/**/*
+!tsconfig.json
