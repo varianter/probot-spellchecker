@@ -4,8 +4,8 @@
 # Except whats needed
 !src
 !src/*
-!node_modules
-!node_modules/*
+!package.json
+!yarn.lock
 !dictionaries
 !dictionaries/
 !dictionaries/**/*
