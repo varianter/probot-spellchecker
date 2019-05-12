@@ -7,6 +7,7 @@ export = (app: Application) => {
   app.log("Yay, the app was loaded!");
 
   app.on(["pull_request.opened"], async context => {
+    context.log("Pull request opened, receieved hook");
     const headSha = context.payload.pull_request.head.sha;
     const baseSha = context.payload.pull_request.base.sha;
 
@@ -20,7 +21,10 @@ export = (app: Application) => {
       })
     );
 
+    context.log("Getting file diffs");
     const fileDiffs = getDiff(result.data);
+
+    context.log(`There were ${fileDiffs.length} files with added lines`);
 
     const lineHits: Array<{
       path: string;
@@ -28,10 +32,12 @@ export = (app: Application) => {
       position: number;
     }> = [];
     for (let fileDiff of fileDiffs) {
+      context.log(`Checking file ${fileDiff.path}`);
       if (path.extname(fileDiff.path) === ".md") {
         for (let addedLine of fileDiff.addedLines) {
           const nonMdText = removeMd(addedLine.text);
           const misspelled = spellcheck(nonMdText).map(m => m.text);
+          context.log(`Found ${misspelled.length} misspellings in line`);
           if (misspelled.length) {
             lineHits.push({
               path: fileDiff.path,
@@ -40,9 +46,12 @@ export = (app: Application) => {
             });
           }
         }
+      } else {
+        context.log("Skipping spellcheck for non-.md file");
       }
     }
 
+    context.log(`Found ${lineHits.length} lines total with misspellings`);
     for (let hit of lineHits) {
       await context.github.pulls.createComment(
         context.issue({
