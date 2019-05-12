@@ -9,7 +9,10 @@
     {
       "src": "src/now.ts",
       "use": "@now/node",
-      "config": { "includeFiles": ["dictionaries/**/*"] }
+      "config": {
+        "includeFiles": ["src/dictionaries/**/*"],
+        "maxLambdaSize": "10mb"
+      }
     }
   ],
   "routes": [{ "src": "/", "dest": "src/now.ts" }]
