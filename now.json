@@ -6,8 +6,11 @@
     "PRIVATE_KEY": "@private-key"
   },
   "builds": [
-    { "src": "src/now.ts", "use": "@now/node" },
-    { "src": "dictionaries/**/*", "use": "@now/static" }
+    {
+      "src": "src/now.ts",
+      "use": "@now/node",
+      "config": { "includeFiles": ["dictionaries/**/*"] }
+    }
   ],
   "routes": [{ "src": "/", "dest": "src/now.ts" }]
 }

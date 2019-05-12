@@ -3,10 +3,9 @@
 
 # Except whats needed
 !src
-!src/*
+!src/**/*
 !package.json
 !yarn.lock
 !dictionaries
-!dictionaries/
 !dictionaries/**/*
 !tsconfig.json
