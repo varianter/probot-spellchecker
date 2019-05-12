@@ -7,7 +7,8 @@ export = (app: Application) => {
   app.log("Yay, the app was loaded!");
 
   app.on(["pull_request.opened"], async context => {
-    context.log("Pull request opened, receieved hook");
+    const pull_request_number = context.payload.pull_request.number;
+    context.log(`Pull request #${pull_request_number} opened, receieved hook`);
     const headSha = context.payload.pull_request.head.sha;
     const baseSha = context.payload.pull_request.base.sha;
 
@@ -52,15 +53,25 @@ export = (app: Application) => {
     }
 
     context.log(`Found ${lineHits.length} lines total with misspellings`);
-    for (let hit of lineHits) {
-      await context.github.pulls.createComment(
-        context.issue({
-          body: `Mulig skrivefeil: ${hit.misspelled.join(", ")}`,
+    if (lineHits && lineHits.length) {
+      const review: any = context.issue({
+        commit_id: headSha,
+        body: "Jeg fant en eller flere mulige skrivefeil 😇",
+        event: "COMMENT",
+        comments: lineHits.map(hit => ({
+          body: `"${hit.misspelled.join('", "')}"`,
           path: hit.path,
-          position: hit.position,
-          commit_id: headSha
-        })
-      );
+          position: hit.position
+        })),
+        pull_number: pull_request_number
+      });
+      delete review.number;
+      try {
+        await context.github.pulls.createReview(review);
+      } catch (err) {
+        context.log("Creating review failed.");
+        context.log(err);
+      }
     }
   });
 };
