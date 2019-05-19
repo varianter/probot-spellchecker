@@ -1,22 +1,43 @@
 import { join } from "path";
-const SpellChecker = require("spellchecker");
-const dictionary_dir = join(__dirname, "dictionaries/no");
-const custom_dict_path = join(__dirname, "dictionaries/no/nb_NO_custom.dic");
-console.log("CWD: ", __dirname);
-SpellChecker.setDictionary("nb_NO", dictionary_dir);
-SpellChecker.addDictionary(custom_dict_path);
 
 export interface Mispelled {
   text: string;
   start: number;
   end: number;
 }
-export default function spellcheck(text: string): Array<Mispelled> {
-  const result = SpellChecker.checkSpelling(text);
-  const mispellings = [];
-  for (let a = 0; a < result.length; a++) {
-    const { start, end } = result[a];
-    mispellings.push({ text: text.substring(start, end), start, end });
+
+export default function initSpellchecker(
+  language: string,
+  dictionaryFolder: string,
+  ignoredWords: string[]
+) {
+  const SpellChecker = require("spellchecker");
+  const subfolder = sanitizeDictionaryFolder(dictionaryFolder, language);
+  const dictionary_dir = join(__dirname, `dictionaries/${subfolder}`);
+  SpellChecker.setDictionary(language, dictionary_dir);
+
+  return function spellcheck(fullText: string): Array<Mispelled> {
+    const result = SpellChecker.checkSpelling(fullText);
+    const mispellings = [];
+    for (let a = 0; a < result.length; a++) {
+      const { start, end } = result[a];
+      const text = fullText.substring(start, end);
+      if (!ignoredWords.includes(text)) {
+        mispellings.push({ text, start, end });
+      }
+    }
+    return mispellings;
+  };
+}
+
+function sanitizeDictionaryFolder(
+  dictionaryFolder: string,
+  language: string
+): string {
+  if (!dictionaryFolder || dictionaryFolder.length == 0) {
+    // Attempt to split and use first part of language
+    return language.split("_")[0];
   }
-  return mispellings;
+
+  return dictionaryFolder;
 }
