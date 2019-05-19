@@ -1,12 +1,12 @@
 {
-  "name": "probot-norwegian-spellchecker",
+  "name": "probot-spellchecker",
   "version": "1.0.0",
-  "description": "A Norwegian spellchecker for PRs",
+  "description": "A Probot spellchecker for PRs",
   "author": "Christian Brevik <christian.brevik@gmail.com>",
   "license": "ISC",
-  "repository": "https://github.com/varianter/probot-norwegian-spellchecker.git",
-  "homepage": "https://github.com/varianter/probot-norwegian-spellchecker",
-  "bugs": "https://github.com/varianter/probot-norwegian-spellchecker/issues",
+  "repository": "https://github.com/varianter/probot-spellchecker.git",
+  "homepage": "https://github.com/varianter/probot-spellchecker",
+  "bugs": "https://github.com/varianter/probot-spellchecker/issues",
   "keywords": [
     "probot",
     "github",

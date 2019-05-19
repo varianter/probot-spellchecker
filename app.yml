@@ -12,7 +12,7 @@ default_permissions:
   # https://developer.github.com/v3/apps/permissions/#permission-on-pull-requests
   pull_requests: write
 
-name: Norwegian Spellchecker
-url: https://github.com/varianter/probot-norwegian-spellchecker
-description: A Norwegian spellchecker for PRs
+name: Probot Spellchecker
+url: https://github.com/varianter/probot-spellchecker
+description: A Probot spellchecker for PRs
 public: false

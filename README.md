@@ -1,4 +1,4 @@
-# [WIP] Norwegian Spellchecker Bot
+# [WIP] Spellchecker Bot
 
 ## Setup
 
