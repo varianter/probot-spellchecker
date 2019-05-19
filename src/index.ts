@@ -1,14 +1,28 @@
-import { Application } from "probot";
-import spellcheck from "./spellcheck";
+import { Application, Context } from "probot";
+import initSpellchecker from "./spellcheck";
 import { getDiff } from "./diff";
-import path from "path";
+import { extname } from "path";
+import { getConfig } from "./config";
 const removeMd = require("remove-markdown");
+
 export = (app: Application) => {
   app.log("Yay, the app was loaded!");
 
-  app.on(["pull_request.opened"], async context => {
+  app.on(["pull_request.opened"], async (context: Context) => {
+    const { owner, repo } = context.repo();
+
     const pull_request_number = context.payload.pull_request.number;
-    context.log(`Pull request #${pull_request_number} opened, receieved hook`);
+    context.log(
+      `Received webhook. Pull request #${pull_request_number} opened in repository '${owner}/${repo}'.`
+    );
+
+    const config = await getConfig(context);
+
+    if (!config) {
+      context.log("Will not run spellchecker since no config was found.");
+      return;
+    }
+
     const headSha = context.payload.pull_request.head.sha;
     const baseSha = context.payload.pull_request.base.sha;
 
@@ -27,6 +41,12 @@ export = (app: Application) => {
 
     context.log(`There were ${fileDiffs.length} files with added lines`);
 
+    const spellcheck = initSpellchecker(
+      config.language,
+      config.dictionary_folder,
+      config.ignored_words
+    );
+
     const lineHits: Array<{
       path: string;
       misspelled: string[];
@@ -34,11 +54,10 @@ export = (app: Application) => {
     }> = [];
     for (let fileDiff of fileDiffs) {
       context.log(`Checking file ${fileDiff.path}`);
-      if (path.extname(fileDiff.path) === ".md") {
+      if (extname(fileDiff.path) === ".md") {
         for (let addedLine of fileDiff.addedLines) {
           const nonMdText = removeMd(addedLine.text);
           const misspelled = spellcheck(nonMdText).map(m => m.text);
-          context.log(`Found ${misspelled.length} misspellings in line`);
           if (misspelled.length) {
             lineHits.push({
               path: fileDiff.path,
@@ -53,10 +72,11 @@ export = (app: Application) => {
     }
 
     context.log(`Found ${lineHits.length} lines total with misspellings`);
+
     if (lineHits && lineHits.length) {
       const review: any = context.issue({
         commit_id: headSha,
-        body: "Jeg fant en eller flere mulige skrivefeil 😇",
+        body: config.main_comment,
         event: "COMMENT",
         comments: lineHits.map(hit => ({
           body: `"${hit.misspelled.join('", "')}"`,

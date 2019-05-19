@@ -1,0 +1,4 @@
+language: "en_US"
+dictionary_folder: "en"
+main_comment: "I found one or more possible misspellings 😇"
+ignored_words: ["probot"]

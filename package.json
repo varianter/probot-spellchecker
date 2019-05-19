@@ -23,6 +23,7 @@
   "dependencies": {
     "dotenv": "^8.0.0",
     "probot": "^9.2.10",
+    "probot-config": "^1.0.1",
     "remove-markdown": "^0.3.0",
     "spellchecker": "https://github.com/cbrevik/node-spellchecker#21c3d15206d1ba967d16fae88d0c166a2671203c"
   },
