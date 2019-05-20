@@ -18,11 +18,6 @@ export = (app: Application) => {
 
     const config = await getConfig(context);
 
-    if (!config) {
-      context.log("Will not run spellchecker since no config was found.");
-      return;
-    }
-
     const headSha = context.payload.pull_request.head.sha;
     const baseSha = context.payload.pull_request.base.sha;
 
