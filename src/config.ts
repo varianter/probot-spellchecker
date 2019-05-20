@@ -13,7 +13,7 @@ interface Config {
   main_comment: string;
 }
 
-export const getConfig = async (context: Context): Promise<Config | null> => {
+export const getConfig = async (context: Context): Promise<Config> => {
   const config: Config = await getConfigFromContext(
     context,
     "spellchecker.yml"
@@ -23,7 +23,7 @@ export const getConfig = async (context: Context): Promise<Config | null> => {
     const { owner, repo } = context.repo();
     context.log(`No spellchecker.yml found in repository '${owner}/${repo}'.`);
 
-    return null;
+    return defaultConfig;
   }
 
   if (!config.language) {
