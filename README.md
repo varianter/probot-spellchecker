@@ -1,6 +1,6 @@
 # Probot Spellchecker
 
-A simple probot which will spellcheck your PRs. Currently supporting just `.md` files. There's no reason it can't support more filestypes, contributions are welcome!
+A simple probot which will spellcheck your PRs. Currently supporting just `.md` files. There's no reason it can't support more filetypes, contributions are welcome!
 
 ## Setup
 
