@@ -10,7 +10,7 @@
       "src": "src/now.ts",
       "use": "@now/node",
       "config": {
-        "includeFiles": ["src/dictionaries/**/*"],
+        "includeFiles": ["../dictionaries/**/*"],
         "maxLambdaSize": "10mb"
       }
     }

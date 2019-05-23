@@ -1,5 +1,3 @@
-import { join } from "path";
-
 export interface Mispelled {
   text: string;
   start: number;
@@ -13,8 +11,7 @@ export default function initSpellchecker(
 ) {
   const SpellChecker = require("spellchecker");
   const subfolder = sanitizeDictionaryFolder(dictionaryFolder, language);
-  const dictionary_dir = join(__dirname, `dictionaries/${subfolder}`);
-  SpellChecker.setDictionary(language, dictionary_dir);
+  SpellChecker.setDictionary(language, `dictionaries/${subfolder}`);
 
   return function spellcheck(fullText: string): Array<Mispelled> {
     const result = SpellChecker.checkSpelling(fullText);
