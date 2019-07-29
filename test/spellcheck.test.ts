@@ -10,11 +10,14 @@ test("nb_NO Derp", () => {
 test("nb_NO æøå", () => {
     const spellchecker = initSpellchecker("nb_NO", "no", []);
 
-    const blueberryjam = spellchecker("blåbærsyltetøy");
+    const blueberryjam = spellchecker("blåbærsyltetøy"); 
     expect(blueberryjam).toStrictEqual([]);
 
     const bleubarrygem = spellchecker("blaubarstyltetaug")
     expect(bleubarrygem).toStrictEqual([{ text: "blaubarstyltetaug", start: 0, end: 17}])
+
+    const words = spellchecker("dette kan typisk være å gjøre gærne ting står det i håndboka")
+    expect(words).toStrictEqual([]);
 })
 
 test("en_US Derp", () => {
