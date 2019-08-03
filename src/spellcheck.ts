@@ -12,6 +12,7 @@ export default function initSpellchecker(
   const SpellChecker = require("spellchecker");
   const subfolder = sanitizeDictionaryFolder(dictionaryFolder, language);
   SpellChecker.setDictionary(language, `dictionaries/${subfolder}`);
+  ignoredWords = ignoredWords.map(t => t.toLowerCase());
 
   return function spellcheck(fullText: string): Array<Mispelled> {
     const result = SpellChecker.checkSpelling(fullText);
@@ -19,7 +20,7 @@ export default function initSpellchecker(
     for (let a = 0; a < result.length; a++) {
       const { start, end } = result[a];
       const text = fullText.substring(start, end);
-      if (!ignoredWords.includes(text)) {
+      if (!ignoredWords.includes(text.toLowerCase())) {
         mispellings.push({ text, start, end });
       }
     }
