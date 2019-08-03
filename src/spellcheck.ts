@@ -1,3 +1,5 @@
+const { Spellchecker, ALWAYS_USE_HUNSPELL } = require("spellchecker");
+
 export interface Mispelled {
   text: string;
   start: number;
@@ -9,13 +11,14 @@ export default function initSpellchecker(
   dictionaryFolder: string,
   ignoredWords: string[]
 ) {
-  const SpellChecker = require("spellchecker");
+  const spellchecker = new Spellchecker();
+  spellchecker.setSpellcheckerType(ALWAYS_USE_HUNSPELL);
   const subfolder = sanitizeDictionaryFolder(dictionaryFolder, language);
-  SpellChecker.setDictionary(language, `dictionaries/${subfolder}`);
+  spellchecker.setDictionary(language, `dictionaries/${subfolder}`);
   ignoredWords = ignoredWords.map(t => t.toLowerCase());
 
   return function spellcheck(fullText: string): Array<Mispelled> {
-    const result = SpellChecker.checkSpelling(fullText);
+    const result = spellchecker.checkSpelling(fullText);
     const mispellings = [];
     for (let a = 0; a < result.length; a++) {
       const { start, end } = result[a];
