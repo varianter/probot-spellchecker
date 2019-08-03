@@ -24,7 +24,7 @@
     "probot": "^9.2.10",
     "probot-config": "^1.0.1",
     "remove-markdown": "^0.3.0",
-    "spellchecker": "https://github.com/cbrevik/node-spellchecker#21c3d15206d1ba967d16fae88d0c166a2671203c"
+    "spellchecker": "^3.7.0"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
