@@ -33,3 +33,10 @@ test("en_US Ignored words", () => {
     const misspelled = spellchecker("A simple probot which will spellcheck.");
     expect(misspelled).toStrictEqual([]);
 })
+
+test("en_US ignored words should be case insensitive", () => {
+    const spellchecker = initSpellchecker("en_US", "en", ["probot"]);
+
+    const misspelled = spellchecker("Probot is an upper case word which should be ignored by lower case ignored word");
+    expect(misspelled).toStrictEqual([]);
+})
