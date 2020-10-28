@@ -7,13 +7,13 @@
   },
   "builds": [
     {
-      "src": "src/now.ts",
-      "use": "@now/node",
+      "src": "src/vercel.ts",
+      "use": "@vercel/node",
       "config": {
         "includeFiles": ["dictionaries/**/*"],
         "maxLambdaSize": "10mb"
       }
     }
   ],
-  "routes": [{ "src": "/", "dest": "src/now.ts" }]
+  "routes": [{ "src": "/", "dest": "src/vercel.ts" }]
 }
