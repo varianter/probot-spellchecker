@@ -1,42 +1,76 @@
-import initSpellchecker from "../src/spellcheck"
+import initSpellchecker from '../src/spellcheck';
 
-test("nb_NO Derp", () => {
-    const spellchecker = initSpellchecker("nb_NO", "no", []);
+test('nb_NO Derp', () => {
+  const spellchecker = initSpellchecker('nb_NO', 'no', []);
 
-    const misspelled = spellchecker("derp");
-    expect(misspelled).toStrictEqual([{ text: "derp", start: 0, end: 4 }]);
-})
+  const misspelled = spellchecker('derp');
+  expect(misspelled).toStrictEqual([{text: 'derp', start: 0, end: 4}]);
+});
 
-test("nb_NO æøå", () => {
-    const spellchecker = initSpellchecker("nb_NO", "no", []);
+test('nb_NO æøå', () => {
+  const spellchecker = initSpellchecker('nb_NO', 'no', []);
 
-    const blueberryjam = spellchecker("blåbærsyltetøy"); 
-    expect(blueberryjam).toStrictEqual([]);
+  const blueberryjam = spellchecker('blåbærsyltetøy');
+  expect(blueberryjam).toStrictEqual([]);
 
-    const bleubarrygem = spellchecker("blaubarstyltetaug")
-    expect(bleubarrygem).toStrictEqual([{ text: "blaubarstyltetaug", start: 0, end: 17}])
+  const bleubarrygem = spellchecker('blaubarstyltetaug');
+  expect(bleubarrygem).toStrictEqual([
+    {text: 'blaubarstyltetaug', start: 0, end: 17},
+  ]);
 
-    const words = spellchecker("dette kan typisk være å gjøre gærne ting står det i håndboka")
-    expect(words).toStrictEqual([]);
-})
+  const words = spellchecker(
+    'dette kan typisk være å gjøre gærne ting står det i håndboka'
+  );
+  expect(words).toStrictEqual([]);
+});
 
-test("en_US Derp", () => {
-    const spellchecker = initSpellchecker("en_US", "en", []);
+test('en_US Derp', () => {
+  const spellchecker = initSpellchecker('en_US', 'en', []);
 
-    const misspelled = spellchecker("derp");
-    expect(misspelled).toStrictEqual([{ text: "derp", start: 0, end: 4 }]);
-})
+  const misspelled = spellchecker('derp');
+  expect(misspelled).toStrictEqual([{text: 'derp', start: 0, end: 4}]);
+});
 
-test("en_US Ignored words", () => {
-    const spellchecker = initSpellchecker("en_US", "en", ["probot"]);
+test('en_US Ignored words', () => {
+  const spellchecker = initSpellchecker('en_US', 'en', ['probot']);
 
-    const misspelled = spellchecker("A simple probot which will spellcheck.");
-    expect(misspelled).toStrictEqual([]);
-})
+  const misspelled = spellchecker('A simple probot which will spellcheck.');
+  expect(misspelled).toStrictEqual([]);
+});
 
-test("en_US ignored words should be case insensitive", () => {
-    const spellchecker = initSpellchecker("en_US", "en", ["probot"]);
+test('en_US ignored words should be case insensitive', () => {
+  const spellchecker = initSpellchecker('en_US', 'en', ['probot']);
 
-    const misspelled = spellchecker("Probot is an upper case word which should be ignored by lower case ignored word");
-    expect(misspelled).toStrictEqual([]);
-})
+  const misspelled = spellchecker(
+    'Probot is an upper case word which should be ignored by lower case ignored word'
+  );
+  expect(misspelled).toStrictEqual([]);
+});
+
+test('Ignore email', () => {
+  const spellchecker = initSpellchecker('en_US', 'en', [], true);
+
+  const misspelled = spellchecker(
+    'Following email should be removed ignored mymail@gmail.com'
+  );
+  expect(misspelled).toStrictEqual([]);
+});
+
+test('Ignore email in text', () => {
+  const spellchecker = initSpellchecker('en_US', 'en', []);
+
+  const misspelled = spellchecker('ignorethismailname@variant.notextaftermail');
+  expect(misspelled).toStrictEqual([]);
+});
+
+test('Ignore email', () => {
+  const spellchecker = initSpellchecker('en_US', 'en', [], false);
+
+  const misspelled = spellchecker(
+    'Following email should be removed ignored mymail@gmail.com'
+  );
+  expect(misspelled).toStrictEqual([
+    {text: 'mymail', start: 42, end: 48},
+    {text: 'gmail', start: 49, end: 54},
+  ]);
+});
