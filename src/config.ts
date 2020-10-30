@@ -1,6 +1,6 @@
-import { Context } from "probot";
+import { Context } from 'probot';
 
-const getConfigFromContext = require("probot-config");
+const getConfigFromContext = require('probot-config');
 
 interface Config {
   // The language to spellcheck
@@ -11,12 +11,14 @@ interface Config {
   ignored_words: string[];
   // The main comment
   main_comment: string;
+  // Skipping spellcheck if added lines are fewer than the threshold
+  lines_changed_threshold: number;
 }
 
 export const getConfig = async (context: Context): Promise<Config> => {
   const config: Config = await getConfigFromContext(
     context,
-    "spellchecker.yml"
+    'spellchecker.yml',
   );
 
   if (!config) {
@@ -28,21 +30,20 @@ export const getConfig = async (context: Context): Promise<Config> => {
 
   if (!config.language) {
     context.log(
-      `Language was not set in spellchecker.yml, defaulting to ${
-        defaultConfig.language
-      }`
+      `Language was not set in spellchecker.yml, defaulting to ${defaultConfig.language}`,
     );
   }
 
   return {
     ...defaultConfig,
-    ...config
+    ...config,
   };
 };
 
 const defaultConfig: Config = {
-  language: "en_US",
-  dictionary_folder: "en",
-  main_comment: "I found one or more possible misspellings 😇",
-  ignored_words: []
+  language: 'en_US',
+  dictionary_folder: 'en',
+  main_comment: 'I found one or more possible misspellings 😇',
+  ignored_words: [],
+  lines_changed_threshold: -1,
 };
