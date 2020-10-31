@@ -1,6 +1,7 @@
-import { Context } from "probot";
+import {Context} from 'probot';
+import {whitelistAttributes} from './spellcheck';
 
-const getConfigFromContext = require("probot-config");
+const getConfigFromContext = require('probot-config');
 
 interface Config {
   // The language to spellcheck
@@ -11,16 +12,18 @@ interface Config {
   ignored_words: string[];
   // The main comment
   main_comment: string;
+  // Attributes to remove from text before spellcheck
+  whitelistAttributes: whitelistAttributes;
 }
 
 export const getConfig = async (context: Context): Promise<Config> => {
   const config: Config = await getConfigFromContext(
     context,
-    "spellchecker.yml"
+    'spellchecker.yml'
   );
 
   if (!config) {
-    const { owner, repo } = context.repo();
+    const {owner, repo} = context.repo();
     context.log(`No spellchecker.yml found in repository '${owner}/${repo}'.`);
 
     return defaultConfig;
@@ -28,21 +31,23 @@ export const getConfig = async (context: Context): Promise<Config> => {
 
   if (!config.language) {
     context.log(
-      `Language was not set in spellchecker.yml, defaulting to ${
-        defaultConfig.language
-      }`
+      `Language was not set in spellchecker.yml, defaulting to ${defaultConfig.language}`
     );
   }
 
   return {
     ...defaultConfig,
-    ...config
+    ...config,
   };
 };
 
 const defaultConfig: Config = {
-  language: "en_US",
-  dictionary_folder: "en",
-  main_comment: "I found one or more possible misspellings 😇",
-  ignored_words: []
+  language: 'en_US',
+  dictionary_folder: 'en',
+  main_comment: 'I found one or more possible misspellings 😇',
+  ignored_words: [],
+  whitelistAttributes: {
+    ignoreEmails: true,
+    ignoreUrls: true,
+  },
 };
