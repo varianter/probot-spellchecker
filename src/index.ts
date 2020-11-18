@@ -57,6 +57,7 @@ export = (app: Application) => {
       config.language,
       config.dictionary_folder,
       config.ignored_words,
+      config.whitelistAttributes
     );
 
     const lineHits: Array<{

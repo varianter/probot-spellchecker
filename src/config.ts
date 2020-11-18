@@ -1,4 +1,5 @@
-import { Context } from 'probot';
+import {Context} from 'probot';
+import {whitelistAttributes} from './spellcheck';
 
 const getConfigFromContext = require('probot-config');
 
@@ -11,6 +12,8 @@ interface Config {
   ignored_words: string[];
   // The main comment
   main_comment: string;
+  // Attributes to remove from text before spellcheck
+  whitelistAttributes: whitelistAttributes;
   // Skipping spellcheck if added lines are fewer than the threshold
   lines_changed_threshold: number;
 }
@@ -22,7 +25,7 @@ export const getConfig = async (context: Context): Promise<Config> => {
   );
 
   if (!config) {
-    const { owner, repo } = context.repo();
+    const {owner, repo} = context.repo();
     context.log(`No spellchecker.yml found in repository '${owner}/${repo}'.`);
 
     return defaultConfig;
@@ -45,5 +48,9 @@ const defaultConfig: Config = {
   dictionary_folder: 'en',
   main_comment: 'I found one or more possible misspellings 😇',
   ignored_words: [],
+  whitelistAttributes: {
+    ignoreEmails: true,
+    ignoreUrls: true,
+  },
   lines_changed_threshold: -1,
 };
