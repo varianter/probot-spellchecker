@@ -14,12 +14,14 @@ interface Config {
   main_comment: string;
   // Attributes to remove from text before spellcheck
   whitelistAttributes: whitelistAttributes;
+  // Skipping spellcheck if added lines are fewer than the threshold
+  lines_changed_threshold: number;
 }
 
 export const getConfig = async (context: Context): Promise<Config> => {
   const config: Config = await getConfigFromContext(
     context,
-    'spellchecker.yml'
+    'spellchecker.yml',
   );
 
   if (!config) {
@@ -31,7 +33,7 @@ export const getConfig = async (context: Context): Promise<Config> => {
 
   if (!config.language) {
     context.log(
-      `Language was not set in spellchecker.yml, defaulting to ${defaultConfig.language}`
+      `Language was not set in spellchecker.yml, defaulting to ${defaultConfig.language}`,
     );
   }
 
@@ -50,4 +52,5 @@ const defaultConfig: Config = {
     ignoreEmails: true,
     ignoreUrls: true,
   },
+  lines_changed_threshold: -1,
 };
